@@ -1,105 +1,55 @@
-class Department {
-  static fiscalYear = 2020;
-  // private id: string;
-  // private name: string;
-  protected employees: string[] = [];
+// 인터페이스 : 객체의 구조를 정의, 객체가 어떻게 구성되어야할지 정의
+// 인터페이스가 필요한 이유 : 인터페이스를 사용하면 객체 구조를 정의하고자 한다는게 더 명확하다, 클래스 안에 인터페이스 구현 가능
 
-  constructor(private readonly id: string, public name: string) {
-    // this.id = id;
-    // this.name = n;
-    console.log(this.fiscalYear);
+// type AddFn = (a: number, b: number) => number;
+interface AddFn {
+  (a: number, b: number): number;
+}
+
+let add: AddFn;
+
+add = (n1: number, n2: number) => {
+  return n1 + n2;
+};
+
+interface Named {
+  readonly name?: string;
+  outputName?: string;
+}
+
+interface Greetable extends Named {
+  greet(phrase: string): void;
+}
+
+// type Greetable = {
+//   name: string;
+
+//   greet(phrase: string): void;
+// };
+
+class Person implements Greetable {
+  name?: string;
+  age = 30;
+
+  constructor(n?: string) {
+    if (n) {
+      this.name = n;
+    }
   }
 
-  static createEmployee(name: string) {
-    return { name: name };
-  }
-
-  describe(this: Department) {
-    console.log(`Department (${this.id}): ${this.name}`);
-  }
-
-  addEmployee(employee: string) {
-    this.employees.push(employee);
-  }
-
-  printEmployeeInformation() {
-    console.log(this.employees.length);
-    console.log(this.employees);
+  greet(phrase: string) {
+    if (this.name) {
+      console.log(phrase + " " + this.name);
+    } else {
+      console.log("Hi!");
+    }
   }
 }
 
-class ITDepartment extends Department {
-  admins: string[];
-  constructor(id: string, admins: string[]) {
-    super(id, "IT");
-    this.admins = admins;
-  }
-}
+let user1: Greetable;
 
-class AccountingDepartment extends Department {
-  private lastReport: string;
+user1 = new Person();
+// user1.name = "Manu";
 
-  get mostRecentReport() {
-    if (this.lastReport) {
-      return this.lastReport;
-    }
-    throw new Error("No report found.");
-  }
-
-  set mostRecentReport(value: string) {
-    if (!value) {
-      throw new Error("Please pass in a valid value!");
-    }
-    this.addReport(value);
-  }
-
-  constructor(id: string, private reports: string[]) {
-    super(id, "Accounting");
-    this.lastReport = reports[0];
-  }
-
-  addEmployee(name: string) {
-    if (name === "Max") {
-      return;
-    }
-    this.employees.push(name);
-  }
-
-  addReport(text: string) {
-    this.reports.push(text);
-    this.lastReport = text;
-  }
-
-  printReports() {
-    console.log(this.reports);
-  }
-}
-
-const employee1 = Department.createEmployee("Max");
-console.log(employee1, Department.fiscalYear);
-
-const it = new ITDepartment("dl", ["Max"]);
-
-it.addEmployee("Max");
-it.addEmployee("Manu");
-
-it.describe();
-it.name = "NEW NAME";
-it.printEmployeeInformation();
-
-console.log(it);
-
-const accounting = new AccountingDepartment("d2", []);
-
-accounting.mostRecentReport = "Year End Report";
-accounting.addReport("Something went wrong...");
-console.log(accounting.mostRecentReport);
-
-accounting.addReport("Something went wrong...");
-
-accounting.addEmployee("Max");
-accounting.addEmployee("Manu");
-
-accounting.printReports();
-accounting.printEmployeeInformation();
-// accounting.employees[2] = "Anna";
+user1.greet("Hi there - I am");
+console.log(user1);
