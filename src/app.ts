@@ -1,55 +1,141 @@
-// 인터페이스 : 객체의 구조를 정의, 객체가 어떻게 구성되어야할지 정의
-// 인터페이스가 필요한 이유 : 인터페이스를 사용하면 객체 구조를 정의하고자 한다는게 더 명확하다, 클래스 안에 인터페이스 구현 가능
-
-// type AddFn = (a: number, b: number) => number;
-interface AddFn {
-  (a: number, b: number): number;
-}
-
-let add: AddFn;
-
-add = (n1: number, n2: number) => {
-  return n1 + n2;
+type Admin = {
+  name: string;
+  privileges: string[];
 };
 
-interface Named {
-  readonly name?: string;
-  outputName?: string;
+type Employee = {
+  name: string;
+  startDate: Date;
+};
+
+// interface ElevatedEmployee extends Employee, Admin {}
+
+type ElevatedEmployee = Admin & Employee;
+
+const el: ElevatedEmployee = {
+  name: "Max",
+  privileges: ["create-server"],
+  startDate: new Date(),
+};
+
+type Combinable = string | number;
+type Numeric = number | boolean;
+
+type Universal = Combinable & Numeric;
+
+function add(a: number, b: number): number;
+function add(a: string, b: string): string;
+function add(a: string, b: number): string;
+function add(a: number, b: number): string;
+function add(a: Combinable, b: Combinable) {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+  return a + b;
 }
 
-interface Greetable extends Named {
-  greet(phrase: string): void;
-}
+const result = add("Max", "Schwarz");
+result.split(" ");
 
-// type Greetable = {
-//   name: string;
+const fetchedUserData = {
+  id: "u1",
+  name: "Max",
+  job: { title: "CEO", description: "My own company" },
+};
 
-//   greet(phrase: string): void;
+console.log(fetchedUserData?.job.title);
+
+const userInput = "";
+
+const storedData = userInput ?? "DEFAULT";
+
+console.log(storedData);
+// type UnKnownEmployee = Employee | Admin;
+
+// function printEmployeeInformation(emp: UnKnownEmployee) {
+//   console.log("Name: " + emp.name);
+//   if ("privileges" in emp) {
+//     console.log("Privileges: " + emp.privileges);
+//   }
+//   if ("startDate" in emp) {
+//     console.log("Privileges: " + emp.startDate);
+//   }
+// }
+
+// printEmployeeInformation({ name: "Manu", startDate: new Date() });
+
+// class Car {
+//   drive() {
+//     console.log("Driving..");
+//   }
+// }
+
+// class Truck {
+//   drive() {
+//     console.log("Driving a truck...");
+//   }
+//   loadCargo(amount: number) {
+//     console.log("Loading cargo..." + amount);
+//   }
+// }
+
+// type Vehicle = Car | Truck;
+
+// const v1 = new Car();
+// const v2 = new Truck();
+
+// function useVehicle(vehicle: Vehicle) {
+//   vehicle.drive();
+//   if (vehicle instanceof Truck) {
+//     vehicle.loadCargo(1000);
+//   }
+// }
+
+// useVehicle(v1);
+// useVehicle(v2);
+
+// interface Bird {
+//   type: "bird";
+//   flyingSpeed: number;
+// }
+
+// interface Horse {
+//   type: "horse";
+//   runningSpeed: number;
+// }
+
+// type Animal = Bird | Horse;
+
+// function moveAnimal(animal: Animal) {
+//   let speed;
+//   switch (animal.type) {
+//     case "bird":
+//       speed = animal.flyingSpeed;
+//       break;
+//     case "horse":
+//       speed = animal.runningSpeed;
+//   }
+//   console.log("Moving at speed: " + speed);
+// }
+
+// moveAnimal({ type: "bird", flyingSpeed: 10 });
+
+// // 취향대로 쓰면됨
+// // const userInputElement = <HTMLInputElement>(
+// //   document.getElementById("user-input")
+// // );
+// const userInputElement = document.getElementById(
+//   "user-input"
+// )! as HTMLInputElement;
+
+// userInputElement.value = "Hi there!";
+
+// interface ErrorContainer {
+//   // {email: "Not a valid email", username: "Must start with a character!"}
+//   [prop: string]: string;
+// }
+
+// const errorBag: ErrorContainer = {
+//   email: "Not a valid email!",
+//   username: "Must start with a capital character!",
 // };
-
-class Person implements Greetable {
-  name?: string;
-  age = 30;
-
-  constructor(n?: string) {
-    if (n) {
-      this.name = n;
-    }
-  }
-
-  greet(phrase: string) {
-    if (this.name) {
-      console.log(phrase + " " + this.name);
-    } else {
-      console.log("Hi!");
-    }
-  }
-}
-
-let user1: Greetable;
-
-user1 = new Person();
-// user1.name = "Manu";
-
-user1.greet("Hi there - I am");
-console.log(user1);

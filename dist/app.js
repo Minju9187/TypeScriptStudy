@@ -1,26 +1,24 @@
 "use strict";
-let add;
-add = (n1, n2) => {
-    return n1 + n2;
+const el = {
+    name: "Max",
+    privileges: ["create-server"],
+    startDate: new Date(),
 };
-class Person {
-    constructor(n) {
-        this.age = 30;
-        if (n) {
-            this.name = n;
-        }
+function add(a, b) {
+    if (typeof a === "string" || typeof b === "string") {
+        return a.toString() + b.toString();
     }
-    greet(phrase) {
-        if (this.name) {
-            console.log(phrase + " " + this.name);
-        }
-        else {
-            console.log("Hi!");
-        }
-    }
+    return a + b;
 }
-let user1;
-user1 = new Person();
-user1.greet("Hi there - I am");
-console.log(user1);
+const result = add("Max", "Schwarz");
+result.split(" ");
+const fetchedUserData = {
+    id: "u1",
+    name: "Max",
+    job: { title: "CEO", description: "My own company" },
+};
+console.log(fetchedUserData === null || fetchedUserData === void 0 ? void 0 : fetchedUserData.job.title);
+const userInput = "";
+const storedData = userInput !== null && userInput !== void 0 ? userInput : "DEFAULT";
+console.log(storedData);
 //# sourceMappingURL=app.js.map
