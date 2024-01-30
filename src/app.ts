@@ -1,102 +1,32 @@
-// const names: Array<string> = []; // string[]
-// // names[0].spilt(' ');
-
-// const promise: Promise<string> = new Promise((resolve, reject) => {
-//   setTimeout(() => {
-//     resolve("This is done!");
-//   }, 2000);
-// });
-
-// promise.then((data) => {
-//   data.split(" ");
-// });
-
-function merge<T extends object, U extends object>(objA: T, objB: U) {
-  return Object.assign(objA, objB);
+function Logger(logString: string) {
+  return function (constructor: Function) {
+    console.log(logString);
+    console.log(constructor);
+  };
 }
 
-const mergedObj = merge({ name: "Max", hobby: ["Sports"] }, { age: 30 });
-
-console.log(mergedObj);
-
-interface Lengthy {
-  length: number;
-}
-
-function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
-  let descriptionText = "Got no value.";
-  if (element.length === 1) {
-    descriptionText = "Got 1 elements.";
-  } else if (element.length > 1) {
-    descriptionText = "Got " + element.length + " elements.";
-  }
-  return [element, descriptionText];
-}
-
-console.log(countAndDescribe(["Sports", "Cooking"]));
-
-function extractAndConvert<T extends object, U extends keyof T>(
-  obj: T,
-  key: U
-) {
-  return "Value" + obj[key];
-}
-
-console.log(extractAndConvert({ name: "Max" }, "name"));
-
-class DataStorage<T extends string | number | boolean> {
-  private data: T[] = [];
-
-  addItem(item: T) {
-    this.data.push(item);
-  }
-
-  removeItem(item: T) {
-    if (this.data.indexOf(item) === -1) {
-      return;
+function WithTemplate(template: string, hookId: string) {
+  return function (constructor: any) {
+    console.log("Rendering template");
+    const hookEl = document.getElementById(hookId);
+    const p = new constructor();
+    if (hookEl) {
+      hookEl.innerHTML = template;
+      hookEl.querySelector("h1")!.textContent = p.name;
     }
-    this.data.splice(this.data.indexOf(item), 1);
+  };
+}
+
+// @Logger("LOGGING - PERSON")
+@WithTemplate("<h1>My Person Object</h1>", "app")
+class Person {
+  name = "Max";
+
+  constructor() {
+    console.log("Creating person object...");
   }
-
-  getItem() {
-    return [...this.data];
-  }
 }
 
-const textStroage = new DataStorage<string>();
-textStroage.addItem("Max");
-textStroage.addItem("Manu");
-textStroage.removeItem("Max");
-console.log(textStroage.getItem());
+const pers = new Person();
 
-const numberStorage = new DataStorage<number>();
-
-// const objStorage = new DataStorage<object>();
-// const maxObj = { name: "Max" };
-// objStorage.addItem(maxObj);
-// objStorage.addItem({ name: "Manu" });
-// objStorage.removeItem(maxObj);
-
-// console.log(objStorage.getItem());
-
-interface CourseGoal {
-  title: string;
-  description: string;
-  completeUntil: Date;
-}
-
-function createCourseGoal(
-  title: string,
-  description: string,
-  date: Date
-): CourseGoal {
-  let courseGoal: Partial<CourseGoal> = {};
-  courseGoal.title = title;
-  courseGoal.description = description;
-  courseGoal.completeUntil = date;
-  return courseGoal as CourseGoal;
-}
-
-const names: Readonly<string[]> = ["Max", "Anna"];
-// names.push("Manu");
-// names.pop();
+console.log(pers);
